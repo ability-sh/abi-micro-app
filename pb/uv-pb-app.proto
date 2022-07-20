@@ -1,0 +1,358 @@
+syntax = "proto3";
+
+option go_package = "./;pb";
+
+package app;
+
+message App {
+	string id = 1;
+	string title = 2;
+	string secret = 3;
+	string info = 4;
+	int32 ctime = 5;
+}
+
+message Ver {
+	string appid = 1;
+	string ver = 2;
+	string title = 3;
+	string info = 4;
+	int32 ctime = 5;
+	int32 status = 6;
+}
+
+message Container {
+	string id = 1;
+	string title = 2;
+	string secret = 3;
+	string info = 4;
+	map<string,string> env = 5;
+	int32 ctime = 6;
+}
+
+message Ac {
+	string cid = 1;
+	string appid = 2;
+	string ver = 3;
+	string title = 4;
+	string info = 5;
+	map<string,string> env = 6;
+	int32 ctime = 7;
+}
+
+message Page {
+	int32 count = 1;
+	int32 p = 2;
+	int32 n = 3;
+	int32 totalCount = 4;
+}
+
+message AppQueryResult {
+	int32 errno = 1;
+	string errmsg = 2;
+
+	Page page = 3;
+	repeated App items = 4;
+}
+
+message VerQueryResult {
+	int32 errno = 1;
+	string errmsg = 2;
+
+	Page page = 3;
+	repeated Ver items = 4;
+}
+
+message ContainerQueryResult {
+	int32 errno = 1;
+	string errmsg = 2;
+
+	Page page = 3;
+	repeated Container items = 4;
+}
+
+message AcQueryResult {
+	int32 errno = 1;
+	string errmsg = 2;
+
+	Page page = 3;
+	repeated Ac items = 4;
+}
+
+message AppCreateTask {
+	string title = 1;
+	string info = 2;
+}
+
+message AppGetTask {
+	string appid = 1;
+}
+
+message AppQueryTask {
+	string q = 1;
+	int32 p = 2;
+	int32 n = 3;
+}
+
+message AppSetTask {
+	string appid = 1;
+	string title = 2;
+	string info = 3;
+	bool secret = 4;
+}
+
+message AppRemoveTask {
+	string appid = 1;
+}
+
+message AppResult {
+	int32 errno = 1;
+	string errmsg = 2;
+	App data = 3;
+}
+
+message VerCreateTask {
+	string appid = 1;
+	string ver = 2;
+	string title = 3;
+	string info = 4;
+	int32 ctime = 5;
+	int32 status = 6;
+}
+
+message VerGetTask {
+	string appid = 1;
+	string ver = 2;
+}
+
+message VerQueryTask {
+	string appid = 1;
+	string q = 2;
+	int32 p = 3;
+	int32 n = 4;
+	string status = 5;
+}
+
+message VerSetTask {
+	string appid = 1;
+	string ver = 2;
+	string info = 3;
+	string title  = 4;
+	string status = 5;
+}
+
+message VerRemoveTask {
+	string appid = 1;
+	string ver = 2;
+}
+
+message VerGetURLTask {
+	string appid = 1;
+	string ver = 2;
+	string ability = 3;
+	int32 expires = 4;
+}
+
+message VerGetURLResult {
+	int32 errno = 1;
+	string errmsg = 2;
+	string data = 4;
+}
+
+message VerUpURLTask {
+	string appid = 1;
+	string ver = 2;
+	string ability = 3;
+	int32 expires = 4;
+}
+
+message VerUpURL {
+	string url = 1;
+	string method = 2;
+	map<string,string> data = 3;
+	string key = 4;
+}
+
+message VerUpURLResult {
+	int32 errno = 1;
+	string errmsg = 2;
+	VerUpURL data = 4;
+}
+
+message VerResult {
+	int32 errno = 1;
+	string errmsg = 2;
+	Ver data = 3;
+}
+
+message ContainerCreateTask {
+	string title = 1;
+	string info = 2;
+	map<string,string> env = 3;
+}
+
+message ContainerGetTask {
+	string cid = 1;
+}
+
+message ContainerQueryTask {
+	string q = 1;
+	int32 p = 2;
+	int32 n = 3;
+}
+
+message ContainerSetTask {
+	string cid = 1;
+	string info = 2;
+	bool secret = 3;
+	map<string,string> env = 4;
+	string title = 5;
+}
+
+message ContainerRemoveTask {
+	string cid = 1;
+}
+
+message ContainerResult {
+	int32 errno = 1;
+	string errmsg = 2;
+	Container data = 3;
+}
+
+message AcAddTask {
+	string cid = 1;
+	string appid = 2;
+	string title = 3;
+	string ver = 4;
+	string info = 5;
+	map<string,string> env = 6;
+}
+
+message AcGetTask {
+	string cid = 1;
+	string appid = 2;
+}
+
+message AcQueryTask {
+	string cid = 1;
+	string appid = 2;
+	string q = 3;
+	int32 p = 4;
+	int32 n = 5;
+}
+
+message AcSetTask {
+	string cid = 1;
+	string appid = 2;
+	string title = 3;
+	string ver = 4;
+	string info = 5;
+	map<string,string> env = 6;
+}
+
+message AcRemoveTask {
+	string cid = 1;
+	string appid = 2;
+}
+
+message AcResult {
+	int32 errno = 1;
+	string errmsg = 2;
+	Ac data = 3;
+}
+
+service Service {
+	/**
+	 * 创建应用
+	 */
+	rpc AppCreate (AppCreateTask) returns (AppResult);
+	/**
+	 * 删除应用
+	 */
+	rpc AppRemove (AppRemoveTask) returns (AppResult);
+	/**
+	 * 修改应用
+	 */
+	rpc AppSet (AppSetTask) returns (AppResult);
+	/**
+	 * 获取单个应用
+	 */
+	rpc AppGet (AppGetTask) returns (AppResult);
+	/**
+	 * 查询多个应用
+	 */
+	rpc AppQuery (AppQueryTask) returns (AppQueryResult);
+
+	/**
+	 * 创建应用版本
+	 */
+	rpc VerCreate (VerCreateTask) returns (VerResult);
+	/**
+	 * 删除应用版本
+	 */
+	rpc VerRemove (VerRemoveTask) returns (VerResult);
+	/**
+	 * 修改应用版本
+	 */
+	rpc VerSet (VerSetTask) returns (VerResult);
+	/**
+	 * 获取单个应用版本
+	 */
+	rpc VerGet (VerGetTask) returns (VerResult);
+	/**
+	 * 查询多个应用版本
+	 */
+	rpc VerQuery (VerQueryTask) returns (VerQueryResult);
+	/**
+	 * 获取应用包URL
+	 */
+	rpc VerGetURL (VerGetURLTask) returns (VerGetURLResult);
+	/**
+	 * 获取应用包上传URL
+	 */
+	rpc VerUpURL (VerUpURLTask) returns (VerUpURLResult);
+
+	/**
+	 * 创建容器
+	 */
+	rpc ContainerCreate (ContainerCreateTask) returns (ContainerResult);
+	/**
+	 * 删除应用版本
+	 */
+	rpc ContainerRemove (ContainerRemoveTask) returns (ContainerResult);
+	/**
+	 * 修改应用版本
+	 */
+	rpc ContainerSet (ContainerSetTask) returns (ContainerResult);
+	/**
+	 * 获取单个应用版本
+	 */
+	rpc ContainerGet (ContainerGetTask) returns (ContainerResult);
+	/**
+	 * 查询多个应用版本
+	 */
+	rpc ContainerQuery (ContainerQueryTask) returns (ContainerQueryResult);
+
+
+	/**
+	 * 容器添加应用
+	 */
+	rpc AcAdd (AcAddTask) returns (AcResult);
+	/**
+	 * 容器删除应用
+	 */
+	rpc AcRemove (AcRemoveTask) returns (AcResult);
+	/**
+	 * 容器修改应用
+	 */
+	rpc AcSet (AcSetTask) returns (AcResult);
+	/**
+	 * 获取单个容器应用
+	 */
+	rpc AcGet (AcGetTask) returns (AcResult);
+	/**
+	 * 查询多个容器应用
+	 */
+	rpc AcQuery (AcQueryTask) returns (AcQueryResult);
+}
+
